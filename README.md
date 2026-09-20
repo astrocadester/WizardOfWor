@@ -27,25 +27,42 @@ tests, and board control are also implemented in native Z80.
 
 ## Credits
 
+This repository builds on the disassembly by Commander Dave, aka tinymouse42.
+
 Original game credits commonly identify:
 
 - Dave Nutting Associates — development
 - Dave Nutting and Tom McHugh — game design
 - Midway Manufacturing, a Bally company — arcade manufacture and release
 
-This repository preserves and documents the program through a buildable source
-reconstruction, including the resident English resources and optional X11
-language projects.
+This repository preserves and documents the program through a buildable source reconstruction, including the resident English resources and optional X11 language projects.
 
-|  |  |
-| --- | --- |
-| [ROM organization](#rom-organization) | Seven populated 4 KB program ROMs reproduce the verified reference hashes; X8 is unpopulated. |
-| [Build](#build) | zmac assembles the combined image, splits the populated CPU ranges, and packages a MAME archive. |
-| [Memory map](#memory-map) | ROM, split-access video, protected RAM, work RAM, the empty X8 window, and optional X11 are mapped across the complete 64 KB address space. |
-| [RAM and I/O](#ram-and-io-ownership) | Actor state, maze data, persistent state, dual sound engines, the speech queue, and both stack anchors are identified. |
-| [Sound](#sound-architecture) | Both Astrocade sound generators, their work-RAM engines, request bytes, and ROM stream interpreter are documented. |
-| [Speech](#speech-architecture) | The 79 English fragments, 80 phrases, SC-01 playback path, queue, and X11 table contract are documented. |
-| [Reverse engineering](#reverse-engineering-status) | Reproducible areas and remaining source-analysis work are summarized. |
+- **[ROM organization](#rom-organization)**  
+  Seven populated 4 KB program ROMs reproduce the verified reference hashes;
+  X8 is unpopulated.
+
+- **[Build](#build)**  
+  zmac assembles the combined image, splits the populated CPU ranges, and
+  packages a MAME archive.
+
+- **[Memory map](#memory-map)**  
+  ROM, split-access video, protected RAM, work RAM, the empty X8 window, and
+  optional X11 are mapped across the complete 64 KB address space.
+
+- **[RAM and I/O](#ram-and-io-ownership)**  
+  Actor state, maze data, persistent state, dual sound engines, the speech
+  queue, and both stack anchors are identified.
+
+- **[Sound](#sound-architecture)**  
+  Both Astrocade sound generators, their work-RAM engines, request bytes, and
+  ROM stream interpreter are documented.
+
+- **[Speech](#speech-architecture)**  
+  The 79 English fragments, 80 phrases, SC-01 playback path, queue, and X11
+  table contract are documented.
+
+- **[Reverse engineering](#reverse-engineering-status)**  
+  Reproducible areas and remaining source-analysis work are summarized.
 
 ## ROM organization
 
@@ -98,21 +115,46 @@ guesses as settled behavior.
 
 ## Project layout
 
-| Path | Contents |
-| --- | --- |
-| `src/wow_disassembly.asm` | Native Z80 program, command streams, English text, graphics, sound, speech, and resident data |
-| `src/wow_equates.include` | Hardware ports, memory map, RAM symbols, record layouts, and game constants |
-| `src/german/GERMAN_X11.asm` | Optional German X11 data ROM |
-| `src/klingon/KLINGON_X11.asm` | Experimental Klingon X11 data ROM |
-| `build.sh` | Linux assembly, seven-ROM splitting, and packaging workflow |
-| `build.bat` | Windows assembly, seven-ROM splitting, and packaging workflow |
-| `docs/SOUND_MAP.md` | Dual Astrocade sound hardware, engine records, bytecode, requests, and event map |
-| `docs/SPEECH_MAP.md` | English fragment and phrase inventories, queue, SC-01 playback, and X11 ABI |
-| `docs/Wizard_of_Wor_ROM_and_Memory_Map.pdf` | Board-oriented ROM and memory-map reference |
-| `docs/Z80_Coding_Style.md` | Source layout, naming, and comment conventions |
-| `tools/Lua/` | MAME Lua sound and speech browsers used for focused validation |
-| `images/wow-marquee.webp` | Marquee displayed by this README |
-| `images/wow-memory-map.png` | Verified 64 KB Z80 CPU memory map |
+- **`src/wow_disassembly.asm`**  
+  Native Z80 program, command streams, English text, graphics, sound, speech,
+  and resident data.
+
+- **`src/wow_equates.include`**  
+  Hardware ports, memory map, RAM symbols, record layouts, and game constants.
+
+- **`src/german/GERMAN_X11.asm`**  
+  Optional German X11 data ROM.
+
+- **`src/klingon/KLINGON_X11.asm`**  
+  Experimental Klingon X11 data ROM.
+
+- **`build.sh`**  
+  Linux assembly, seven-ROM splitting, and packaging workflow.
+
+- **`build.bat`**  
+  Windows assembly, seven-ROM splitting, and packaging workflow.
+
+- **`docs/SOUND_MAP.md`**  
+  Dual Astrocade sound hardware, engine records, bytecode, requests, and event
+  map.
+
+- **`docs/SPEECH_MAP.md`**  
+  English fragment and phrase inventories, queue, SC-01 playback, and X11 ABI.
+
+- **`docs/Wizard_of_Wor_ROM_and_Memory_Map.pdf`**  
+  Board-oriented ROM and memory-map reference.
+
+- **`docs/Z80_Coding_Style.md`**  
+  Source layout, naming, and comment conventions.
+
+- **`tools/Lua/`**  
+  MAME Lua sound and speech browsers used for focused validation.
+
+- **`images/wow-marquee.webp`**  
+  Marquee displayed by this README.
+
+- **`images/wow-memory-map.png`**  
+  Verified 64 KB Z80 CPU memory map.
 
 Generated assembly output is written below `src/zout/`; generated ROM members
 and ZIP archives are written below `roms/`.
@@ -418,17 +460,41 @@ DIP input patterns while continuing to service the speech queue.
 
 ## Reverse-engineering status
 
-| Area | Status |
-| --- | --- |
-| Reproducible ROM build | Verified for the seven populated program ROMs listed above |
-| CPU memory map | Complete at board-window level, including split-access low ROM, video RAM, protected/work RAM, empty X8, and optional X11 |
-| Boot and diagnostics | Major paths named and documented, including VRAM, RAM, ROM, input, sound, and crosshatch tests |
-| Input and cabinet control | Port roles and active-low control paths identified; several shared-port details remain documented at hardware level rather than by schematic signal name |
-| Actor and maze state | Player/enemy records, compact maze selection, and 66-byte expanded maze map identified |
-| Sound | Dual engines, request banks, bytecode, work RAM, and event producers substantially mapped in `docs/SOUND_MAP.md` |
-| Speech | Resident fragments and phrases, queue, SC-01 playback, and X11 ABI mapped in `docs/SPEECH_MAP.md` |
-| Progression and game flow | Main command streams and core dungeon state identified; some late-game selection and difficulty rules still use legacy labels |
-| Graphics and remaining data | Major framebuffer, Function Generator, pattern-board, sprite, font, and palette paths identified; fine-grained data naming remains in progress |
+- **Reproducible ROM build**  
+  Verified for the seven populated program ROMs listed above.
+
+- **CPU memory map**  
+  Complete at board-window level, including split-access low ROM, video RAM,
+  protected and work RAM, empty X8, and optional X11.
+
+- **Boot and diagnostics**  
+  Major paths named and documented, including VRAM, RAM, ROM, input, sound, and
+  crosshatch tests.
+
+- **Input and cabinet control**  
+  Port roles and active-low control paths identified. Several shared-port
+  details remain documented at hardware level rather than by schematic signal
+  name.
+
+- **Actor and maze state**  
+  Player and enemy records, compact maze selection, and the 66-byte expanded
+  maze map are identified.
+
+- **Sound**  
+  Dual engines, request banks, bytecode, work RAM, and event producers are
+  substantially mapped in `docs/SOUND_MAP.md`.
+
+- **Speech**  
+  Resident fragments and phrases, the queue, SC-01 playback, and the X11 ABI
+  are mapped in `docs/SPEECH_MAP.md`.
+
+- **Progression and game flow**  
+  Main command streams and core dungeon state are identified. Some late-game
+  selection and difficulty rules still use legacy labels.
+
+- **Graphics and remaining data**  
+  Major framebuffer, Function Generator, pattern-board, sprite, font, and
+  palette paths are identified; fine-grained data naming remains in progress.
 
 Unresolved addresses retain neutral labels instead of speculative names. New
 semantic names should be backed by concrete call sites, data flow, hardware
